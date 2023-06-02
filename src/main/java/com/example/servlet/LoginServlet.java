@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -26,8 +27,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
+        String login = Optional.ofNullable(req.getParameter("login")).orElse("");
+        String password = Optional.ofNullable(req.getParameter("password")).orElse("");
         if (Users.getInstance().getUsers().contains(login) && !password.isEmpty()) {
             req.getSession().setAttribute("user", login);
             resp.sendRedirect("/user/hello.jsp");
